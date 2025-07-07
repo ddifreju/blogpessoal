@@ -1,98 +1,79 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# ✍️ Blog Pessoal: Backend Completo com NestJS, TypeORM e Segurança (JWT, Bcrypt)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este repositório contém o **backend robusto** de uma aplicação de blog pessoal, desenvolvida com o framework **NestJS**. Este projeto representa um marco significativo na minha jornada de desenvolvimento, pois integra de forma avançada **APIs RESTful**, **Programação Orientada a Objetos (POO)**, **interação com banco de dados via TypeORM** e, crucialmente, uma **camada de segurança completa (autenticação com JWT e criptografia de senha com Bcrypt)**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O sistema foi projetado para gerenciar postagens, temas e usuários, com todas as funcionalidades de CRUD e relacionamentos bem definidos, preparando o terreno para uma futura integração com um frontend completo e interativo.
 
-## Description
+## ✨ Destaques e Aprendizados Principais
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* **Desenvolvimento de APIs RESTful Completas:** Implementação de endpoints claros e funcionais para gerenciar `Postagens`, `Temas` e `Usuários`, com todas as operações CRUD (`GET`, `POST`, `PUT`, `DELETE`).
+* **NestJS Framework:** Utilização avançada do NestJS para construir uma aplicação backend escalável, modular e com base em boas práticas de design de software.
+    * **Módulos (`@Module`):** Organização lógica da aplicação, encapsulando funcionalidades relacionadas em `PostagemModule`, `TemaModule`, `UsuarioModule` e `AuthModule`.
+    * **Controladores (`@Controller`):** Responsáveis por receber requisições HTTP e roteá-las para os serviços apropriados.
+    * **Serviços (`@Injectable`):** Contêm a lógica de negócio principal e a comunicação com a camada de persistência (TypeORM).
+    * **Pipes (`ParseIntPipe`, `ValidationPipe`):** Para validação e transformação de dados de entrada, garantindo a integridade dos dados.
+* **Programação Orientada a Objetos (POO):**
+    * **Modelagem de Entidades Complexas:** Definição detalhada de classes `Postagem`, `Tema` e `Usuario` com suas propriedades, validações e tipos de dados.
+    * **Relacionamentos de Banco de Dados (`TypeORM`):**
+        * **`ManyToOne` (Postagem -> Tema):** Uma postagem pertence a um único tema.
+        * **`ManyToOne` (Postagem -> Usuario):** Uma postagem é criada por um único usuário.
+        * **`OneToMany` (Tema -> Postagem):** Um tema pode ter muitas postagens associadas.
+        * **`OneToMany` (Usuario -> Postagem):** Um usuário pode ter muitas postagens criadas por ele.
+    * **`onDelete: "CASCADE"`:** Configuração importante nos relacionamentos para garantir que, ao deletar um tema ou usuário, suas postagens associadas também sejam automaticamente removidas do banco de dados, mantendo a consistência.
+* **TypeORM:** ORM (Object-Relational Mapper) robusto para abstrair a interação com o banco de dados.
+    * **Decorações de Entidade (`@Entity`, `@PrimaryGeneratedColumn`, `@Column`, `@UpdateDateColumn`):** Mapeamento direto de classes TypeScript para tabelas e colunas do banco de dados.
+    * **`@UpdateDateColumn`:** Gerenciamento automático de timestamps para a coluna `data` da postagem, registrando a última atualização.
+* **Camada de Segurança Completa (Autenticação e Autorização):** **Este é um grande diferencial do projeto!**
+    * **Módulo `Auth`:** Implementação de um sistema de autenticação e autorização para proteger a API.
+    * **Criptografia de Senha com BCrypt:** Utilização da biblioteca `bcryptjs` para armazenar senhas de usuários de forma segura no banco de dados (hashing unidirecional).
+    * **Guards (`AuthGuard`):** Proteção de rotas da API, garantindo que apenas usuários autenticados (com um token JWT válido) e/ou autorizados possam acessá-las.
+    * **Estratégias de Autenticação JWT:** Geração e validação de JSON Web Tokens para gerenciar sessões de usuários de forma stateless.
+* **Validação de Dados:** Uso extensivo da biblioteca `class-validator` com decorators como `@IsNotEmpty`, `@IsEmail`, `@MinLength` para validar os dados de entrada das requisições HTTP, assegurando a qualidade e segurança das informações.
 
-## Project setup
+## 🚀 Funcionalidades da API
 
-```bash
-$ npm install
-```
+A API do Blog Pessoal oferece os seguintes endpoints RESTful, organizados por suas respectivas entidades e módulos:
 
-## Compile and run the project
+### **Endpoints de Tema (`/temas`)**
 
-```bash
-# development
-$ npm run start
+* `GET /temas`: Retorna uma lista de todos os temas cadastrados no blog.
+* `GET /temas/:id`: Retorna os detalhes de um tema específico, buscando-o pelo seu ID.
+* `GET /temas/descricao/:descricao`: Retorna temas que contêm a string fornecida na sua descrição.
+* `POST /temas`: Cria um novo tema.
+* `PUT /temas`: Atualiza um tema existente.
+* `DELETE /temas/:id`: Exclui um tema pelo ID, com exclusão em cascata das postagens associadas.
 
-# watch mode
-$ npm run start:dev
+### **Endpoints de Postagem (`/postagens`)**
 
-# production mode
-$ npm run start:prod
-```
+* `GET /postagens`: Retorna uma lista de todas as postagens do blog.
+* `GET /postagens/:id`: Retorna os detalhes de uma postagem específica, buscando-a pelo seu ID.
+* `GET /postagens/titulo/:titulo`: Retorna postagens que contêm a string fornecida no seu título.
+* `POST /postagens`: Cria uma nova postagem, associando-a a um tema e um usuário existentes.
+* `PUT /postagens`: Atualiza uma postagem existente.
+* `DELETE /postagens/:id`: Exclui uma postagem pelo ID.
 
-## Run tests
+### **Endpoints de Usuário (`/usuarios`)**
 
-```bash
-# unit tests
-$ npm run test
+* `GET /usuarios`: Retorna uma lista de todos os usuários cadastrados (geralmente uma rota protegida).
+* `GET /usuarios/:id`: Retorna os detalhes de um usuário específico pelo ID.
+* `GET /usuarios/usuario/:usuario`: Retorna um usuário específico pelo seu username/email.
+* `POST /usuarios/cadastrar`: Realiza o registro de um novo usuário na plataforma, criptografando a senha.
+* `PUT /usuarios/atualizar`: Atualiza os dados de um usuário existente (requer autenticação).
 
-# e2e tests
-$ npm run test:e2e
+### **Endpoints de Autenticação (`/auth`)**
 
-# test coverage
-$ npm run test:cov
-```
+* `POST /auth/logar`: Permite que um usuário faça login com suas credenciais, retornando um token de autenticação (JWT) se as credenciais forem válidas.
 
-## Deployment
+## 🛠️ Tecnologias Utilizadas
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+* **NestJS:** Framework progressivo de Node.js para construção de APIs RESTful eficientes e escaláveis.
+* **TypeScript:** Linguagem de programação principal, que oferece tipagem estática, interfaces e outros recursos avançados, aprimorando a segurança e manutenibilidade do código.
+* **TypeORM:** ORM (Object-Relational Mapper) que facilita a interação com o banco de dados relacional (compatível com PostgreSQL, MySQL, SQL Server, etc.).
+* **`bcryptjs`:** Biblioteca para criptografia (hashing) de senhas, garantindo que elas não sejam armazenadas em texto simples.
+* **`class-validator`:** Utilizado para aplicar validações declarativas nos DTOs (Data Transfer Objects) e entidades, garantindo a integridade dos dados.
+* **`@nestjs/passport` / `passport-jwt`:** Bibliotecas essenciais para a implementação da estratégia de autenticação baseada em JWT.
+* **Node.js:** Ambiente de execução.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 📁 Estrutura do Projeto
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+O projeto segue uma arquitetura modular e bem definida, baseada nas boas práticas do NestJS, promovendo a separação de responsabilidades e a escalabilidade:

@@ -9,6 +9,7 @@ describe('Testes dos Módulos Usuário e Auth (e2e)', () => {
   let app: INestApplication<App>;
   let token: any;
   let usuarioId: any;
+  let temaId: any;
 
 
   beforeAll(async () => {
@@ -95,8 +96,44 @@ describe('Testes dos Módulos Usuário e Auth (e2e)', () => {
     .expect(200)
     .then( resposta => {
       expect("Root Atualizado").toEqual(resposta.body.nome);
-    })
-
+    })    
   })
+
+  it('06 - Deve apresentar erro ao cadastrar o usuario com e-mail inválido', async () => {
+    return await request(app.getHttpServer())
+      .post('/usuarios/cadastrar')
+      .send({
+        nome: 'Root',
+        usuario: 'root@root',
+        senha: 'rootroot',
+        foto: '-',
+      })
+      .expect(400);
+  });
+
+   it('07 - Deve conseguir criar um novo tema', async () => {
+    const resposta = await request(app.getHttpServer())
+      .post('/temas')
+      .set('Authorization', `${token}`)
+      .send({
+        descricao: 'novo tema',
+      })
+      .expect(201);
+
+    temaId = resposta.body.id;
+  });
+
+  it('08 - Deve conseguir criar uma nova postagem', async () => {
+    await request(app.getHttpServer())
+      .post('/postagens')
+      .set('Authorization', `${token}`)
+      .send({
+        titulo: 'titulo da postagem',
+        texto: 'texto da postagem',
+        tema: temaId,
+        usuario: usuarioId,
+      })
+      .expect(201);
+  });
   
 });
